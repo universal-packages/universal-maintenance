@@ -92,7 +92,8 @@ export async function updateDependents(): Promise<void> {
 
   if (errors.length) {
     console.log('Errors:')
-    console.warn(errors)
+    console.error(errors)
+    throw new Error('There were errors')
   }
 }
 
