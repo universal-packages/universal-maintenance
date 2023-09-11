@@ -15,9 +15,10 @@ export async function updateDependents(): Promise<void> {
   for (let i = 0; i < dependents.regular.length; i++) {
     const dependent = dependents.regular[i]
     const repoName = dependent.repository.url.split('/').pop().replace('.git', '')
+    const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository.url
 
     try {
-      await execCommand(`cd ./tmp && git clone ${dependent.repository.url}`)
+      await execCommand(`cd ./tmp && git clone ${repoUrl}`)
       await execCommand(`cd ./tmp/${repoName} && npm i`)
       await execCommand(`cd ./tmp/${repoName} && npm i ${packageName}@latest`)
       await execCommand(`cd ./tmp/${repoName} && npm run test:full`)
@@ -35,9 +36,10 @@ export async function updateDependents(): Promise<void> {
   for (let i = 0; i < dependents.peer.length; i++) {
     const dependent = dependents.peer[i]
     const repoName = dependent.repository.url.split('/').pop().replace('.git', '')
+    const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository.url
 
     try {
-      await execCommand(`cd ./tmp && git clone ${dependent.repository.url}`)
+      await execCommand(`cd ./tmp && git clone ${repoUrl}`)
       await execCommand(`cd ./tmp/${repoName} && npm i`)
       await execCommand(`cd ./tmp/${repoName} && npm i ${packageName}@latest --save-peer`)
       await execCommand(`cd ./tmp/${repoName} && npm run test:full`)
@@ -55,9 +57,10 @@ export async function updateDependents(): Promise<void> {
   for (let i = 0; i < dependents.optional.length; i++) {
     const dependent = dependents.optional[i]
     const repoName = dependent.repository.url.split('/').pop().replace('.git', '')
+    const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository.url
 
     try {
-      await execCommand(`cd ./tmp && git clone ${dependent.repository.url}`)
+      await execCommand(`cd ./tmp && git clone ${repoUrl}`)
       await execCommand(`cd ./tmp/${repoName} && npm i`)
       await execCommand(`cd ./tmp/${repoName} && npm i ${packageName}@latest --save-optional`)
       await execCommand(`cd ./tmp/${repoName} && npm run test:full`)
@@ -73,9 +76,10 @@ export async function updateDependents(): Promise<void> {
   for (let i = 0; i < dependents.dev.length; i++) {
     const dependent = dependents.dev[i]
     const repoName = dependent.repository.url.split('/').pop().replace('.git', '')
+    const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository.url
 
     try {
-      await execCommand(`cd ./tmp && git clone ${dependent.repository.url}`)
+      await execCommand(`cd ./tmp && git clone ${repoUrl}`)
       await execCommand(`cd ./tmp/${repoName} && npm i`)
       await execCommand(`cd ./tmp/${repoName} && npm i ${packageName}@latest --save-dev`)
       await execCommand(`cd ./tmp/${repoName} && npm run test:full`)
