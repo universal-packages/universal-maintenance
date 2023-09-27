@@ -4,7 +4,7 @@ import { updateDependents } from '../src/updateDependents'
 
 jest.mock('child_process')
 
-describe('updateDependents', (): void => {
+describe(updateDependents, (): void => {
   it('do all the preparations funds an app and runs it (sets core)', async (): Promise<void> => {
     await updateDependents()
 
