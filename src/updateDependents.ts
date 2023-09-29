@@ -31,6 +31,8 @@ export async function updateDependents(): Promise<void> {
     } catch (error) {
       errors.push(error)
     }
+
+    if (i !== dependents.regular.length - 1 && process.env['NODE_ENV'] !== 'test') await new Promise((resolve) => setTimeout(resolve, 60000))
   }
 
   for (let i = 0; i < dependents.peer.length; i++) {
