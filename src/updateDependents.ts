@@ -48,7 +48,7 @@ export async function updateDependents(): Promise<void> {
     }
   }
 
-  for (let i = 0; i < dependents.dev.length; i++) {
+  for (let i = 0; i < 1; i++) {
     const dependent = dependents.dev[i]
 
     if (dependent.devDependencies[packageName] === `^${packageJson.version}`) continue
@@ -77,8 +77,8 @@ async function performPackageUpgrade(packageName: string, type: PackageType, dep
     regular: ''
   }
 
-  const repoName = dependent.repository.url.split('/').pop().replace('.git', '')
-  const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository.url
+  const repoName = `${dependent.name.replace('@universal-packages/', 'universal-')}`
+  const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository
 
   await execCommand(`cd ./tmp && git clone ${repoUrl}`)
   await execCommand(`cd ./tmp/${repoName} && npm i`)

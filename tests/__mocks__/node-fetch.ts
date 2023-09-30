@@ -33,42 +33,38 @@ export default async function fetch(url: string): Promise<any> {
       } else {
         if (url.includes('package-1')) {
           return {
+            name: '@universal-packages/package-1',
             dependencies: {
               '@universal-packages/maintenance': '1.0.0'
             },
-            repository: {
-              url: 'git://github.com/universal-packages/package-1.git'
-            }
+            repository: 'git://github.com/universal-packages/universal-package-1.git'
           }
         }
         if (url.includes('package-2')) {
           return {
+            name: '@universal-packages/package-2',
             peerDependencies: {
               '@universal-packages/maintenance': '1.0.0'
             },
-            repository: {
-              url: 'git://github.com/universal-packages/package-2.git'
-            }
+            repository: 'git://github.com/universal-packages/universal-package-2.git'
           }
         }
         if (url.includes('package-3')) {
           return {
+            name: '@universal-packages/package-3',
             optionalDependencies: {
               '@universal-packages/maintenance': '1.0.0'
             },
-            repository: {
-              url: 'git://github.com/universal-packages/package-3.git'
-            }
+            repository: 'git://github.com/universal-packages/universal-package-3.git'
           }
         }
         if (url.includes('package-4')) {
           return {
+            name: '@universal-packages/package-4',
             devDependencies: {
               '@universal-packages/maintenance': '1.0.0'
             },
-            repository: {
-              url: 'git://github.com/universal-packages/package-4.git'
-            }
+            repository: 'git://github.com/universal-packages/universal-package-4.git'
           }
         }
       }
