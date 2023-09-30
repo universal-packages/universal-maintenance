@@ -2,7 +2,7 @@ import { readPackageJson } from '@universal-packages/package-json'
 import { exec } from 'child_process'
 import fetch from 'node-fetch'
 
-import { Dependents, PackageVersionResult, PackagesSearchResult } from './types'
+import { Dependents, PackageType, PackageVersionResult, PackagesSearchResult } from './types'
 
 export async function updateDependents(): Promise<void> {
   const packageJson = readPackageJson()
@@ -14,58 +14,35 @@ export async function updateDependents(): Promise<void> {
 
   for (let i = 0; i < dependents.regular.length; i++) {
     const dependent = dependents.regular[i]
-    const repoName = dependent.repository.url.split('/').pop().replace('.git', '')
-    const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository.url
+
+    if (dependent.dependencies[packageName] === `^${packageJson.version}`) continue
 
     try {
-      await execCommand(`cd ./tmp && git clone ${repoUrl}`)
-      await execCommand(`cd ./tmp/${repoName} && npm i`)
-      await execCommand(`cd ./tmp/${repoName} && npm i ${packageName}@latest`)
-      await execCommand(`cd ./tmp/${repoName} && git add .`)
-      await execCommand(`cd ./tmp/${repoName} && git commit -m "Update ${packageName}"`)
-      await execCommand(`cd ./tmp/${repoName} && npm version patch`)
-      await execCommand(`cd ./tmp/${repoName} && git push`)
-      await execCommand(`cd ./tmp/${repoName} && git push --tags`)
+      await performPackageUpgrade(packageName, 'regular', dependent, true, i !== dependents.regular.length - 1)
     } catch (error) {
       errors.push(error)
     }
-
-    if (i !== dependents.regular.length - 1) await new Promise((resolve) => setTimeout(resolve, 60000))
   }
 
   for (let i = 0; i < dependents.peer.length; i++) {
     const dependent = dependents.peer[i]
-    const repoName = dependent.repository.url.split('/').pop().replace('.git', '')
-    const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository.url
+
+    if (dependent.peerDependencies[packageName] === `^${packageJson.version}`) continue
 
     try {
-      await execCommand(`cd ./tmp && git clone ${repoUrl}`)
-      await execCommand(`cd ./tmp/${repoName} && npm i`)
-      await execCommand(`cd ./tmp/${repoName} && npm i ${packageName}@latest --save-peer`)
-      await execCommand(`cd ./tmp/${repoName} && git add .`)
-      await execCommand(`cd ./tmp/${repoName} && git commit -m "Update ${packageName}"`)
-      await execCommand(`cd ./tmp/${repoName} && npm version patch`)
-      await execCommand(`cd ./tmp/${repoName} && git push`)
-      await execCommand(`cd ./tmp/${repoName} && git push --tags`)
+      await performPackageUpgrade(packageName, 'peer', dependent, true, i !== dependents.peer.length - 1)
     } catch (error) {
       errors.push(error)
     }
-
-    if (i !== dependents.regular.length - 1) await new Promise((resolve) => setTimeout(resolve, 60000))
   }
 
   for (let i = 0; i < dependents.optional.length; i++) {
     const dependent = dependents.optional[i]
-    const repoName = dependent.repository.url.split('/').pop().replace('.git', '')
-    const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository.url
+
+    if (dependent.optionalDependencies[packageName] === `^${packageJson.version}`) continue
 
     try {
-      await execCommand(`cd ./tmp && git clone ${repoUrl}`)
-      await execCommand(`cd ./tmp/${repoName} && npm i`)
-      await execCommand(`cd ./tmp/${repoName} && npm i ${packageName}@latest --save-optional`)
-      await execCommand(`cd ./tmp/${repoName} && git add .`)
-      await execCommand(`cd ./tmp/${repoName} && git commit -m "Update ${packageName}"`)
-      await execCommand(`cd ./tmp/${repoName} && git push`)
+      await performPackageUpgrade(packageName, 'optional', dependent, false, false)
     } catch (error) {
       errors.push(error)
     }
@@ -73,16 +50,11 @@ export async function updateDependents(): Promise<void> {
 
   for (let i = 0; i < dependents.dev.length; i++) {
     const dependent = dependents.dev[i]
-    const repoName = dependent.repository.url.split('/').pop().replace('.git', '')
-    const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository.url
+
+    if (dependent.devDependencies[packageName] === `^${packageJson.version}`) continue
 
     try {
-      await execCommand(`cd ./tmp && git clone ${repoUrl}`)
-      await execCommand(`cd ./tmp/${repoName} && npm i`)
-      await execCommand(`cd ./tmp/${repoName} && npm i ${packageName}@latest --save-dev`)
-      await execCommand(`cd ./tmp/${repoName} && git add .`)
-      await execCommand(`cd ./tmp/${repoName} && git commit -m "Update ${packageName}"`)
-      await execCommand(`cd ./tmp/${repoName} && git push`)
+      await performPackageUpgrade(packageName, 'dev', dependent, false, false)
     } catch (error) {
       errors.push(error)
     }
@@ -95,6 +67,33 @@ export async function updateDependents(): Promise<void> {
     console.error(errors)
     throw new Error('There were errors')
   }
+}
+
+async function performPackageUpgrade(packageName: string, type: PackageType, dependent: PackageVersionResult, publish: boolean, wait: boolean): Promise<void> {
+  const SAVE_MAP: Record<PackageType, string> = {
+    dev: ' --save-dev',
+    peer: ' --save-peer',
+    optional: ' --save-optional',
+    regular: ''
+  }
+
+  const repoName = dependent.repository.url.split('/').pop().replace('.git', '')
+  const repoUrl = process.env.GITHUB_TOKEN ? `https://oauth2:${process.env.GITHUB_TOKEN}@github.com/universal-packages/${repoName}` : dependent.repository.url
+
+  await execCommand(`cd ./tmp && git clone ${repoUrl}`)
+  await execCommand(`cd ./tmp/${repoName} && npm i`)
+  await execCommand(`cd ./tmp/${repoName} && npm i ${packageName}@latest${SAVE_MAP[type]}`)
+  await execCommand(`cd ./tmp/${repoName} && git add .`)
+  await execCommand(`cd ./tmp/${repoName} && git commit -m "Update ${packageName}"`)
+  await execCommand(`cd ./tmp/${repoName} && git push`)
+
+  if (publish) {
+    await execCommand(`cd ./tmp/${repoName} && npm version patch`)
+    await execCommand(`cd ./tmp/${repoName} && git push`)
+    await execCommand(`cd ./tmp/${repoName} && git push --tags`)
+  }
+
+  if (wait) await new Promise((resolve) => setTimeout(resolve, 30000))
 }
 
 async function findDependents(packageName: string): Promise<Dependents> {
@@ -141,7 +140,7 @@ async function fetchUniversalPackages(): Promise<PackageVersionResult[]> {
   const finalPackages = []
 
   for (let i = 0; i < packages.objects.length; i++) {
-    finalPackages.push(await fetchPackage(packages.objects[i].package.name, packages.objects[i].package.version))
+    finalPackages.push(await fetchPackage(packages.objects[i].package.name))
   }
 
   return finalPackages
@@ -152,8 +151,9 @@ async function fetchPackages(search: string): Promise<PackagesSearchResult> {
   return await response.json()
 }
 
-async function fetchPackage(packageName: string, version: string): Promise<PackageVersionResult> {
-  const response = await fetch(`https://registry.npmjs.org/${packageName}/${version}`)
+async function fetchPackage(packageName: string): Promise<PackageVersionResult> {
+  const repoName = packageName.replace('@universal-packages/', 'universal-')
+  const response = await fetch(`https://raw.githubusercontent.com/universal-packages/${repoName}/main/package.json`)
   return await response.json()
 }
 

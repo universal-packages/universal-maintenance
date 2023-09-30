@@ -1,3 +1,5 @@
+export type PackageType = 'dev' | 'peer' | 'optional' | 'regular'
+
 export interface Dependents {
   all: PackageVersionResult[]
   dev: PackageVersionResult[]
