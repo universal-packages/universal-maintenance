@@ -48,7 +48,7 @@ export async function updateDependents(): Promise<void> {
     }
   }
 
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < dependents.dev.length; i++) {
     const dependent = dependents.dev[i]
 
     if (dependent.devDependencies[packageName] === `^${packageJson.version}`) continue
