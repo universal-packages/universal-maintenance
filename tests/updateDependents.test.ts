@@ -24,6 +24,7 @@ describe(updateDependents, (): void => {
     expect(exec).toHaveBeenCalledWith('cd ./tmp/universal-package-2 && npm i @universal-packages/maintenance@latest --save-peer', expect.anything(), expect.anything())
     expect(exec).toHaveBeenCalledWith('cd ./tmp/universal-package-2 && git add .', expect.anything(), expect.anything())
     expect(exec).toHaveBeenCalledWith('cd ./tmp/universal-package-2 && git commit -m "Update @universal-packages/maintenance"', expect.anything(), expect.anything())
+    expect(exec).toHaveBeenCalledWith('cd ./tmp/universal-package-2 && npm run test:full', expect.anything(), expect.anything())
     expect(exec).toHaveBeenCalledWith('cd ./tmp/universal-package-2 && npm version patch', expect.anything(), expect.anything())
     expect(exec).toHaveBeenCalledWith('cd ./tmp/universal-package-2 && git push', expect.anything(), expect.anything())
     expect(exec).toHaveBeenCalledWith('cd ./tmp/universal-package-2 && git push --tags', expect.anything(), expect.anything())
