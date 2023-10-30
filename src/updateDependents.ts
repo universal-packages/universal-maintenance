@@ -89,6 +89,7 @@ async function performPackageUpgrade(packageName: string, type: PackageType, dep
 
   if (publish) {
     await execCommand(`cd ./tmp/${repoName} && npm run test:full`)
+    await execCommand(`cd ./tmp/${repoName} && npm run build`)
     await execCommand(`cd ./tmp/${repoName} && npm version patch`)
     await execCommand(`cd ./tmp/${repoName} && git push`)
     await execCommand(`cd ./tmp/${repoName} && git push --tags`)
