@@ -17,9 +17,11 @@
     "test:full": "jest --coverage --verbose",
     "test:clear": "jest --clearCache",
     "format": "prettier --write \"./{src,tests}/**/*.{ts,tsx,js,jsx,json}\"",
-    "update-dependents": "./bin/umaintenance.js update-dependents"
+    "update-dependents": "./bin/umaintenance.js update-dependents",
+    "prepare-development": "./bin/umaintenance.js prepare-development"
   },
   "dependencies": {
+    "@universal-packages/directory-traversal": "^1.2.3",
     "@universal-packages/package-json": "^1.0.0",
     "node-fetch": "^2.6.7",
     "ts-node": "^10.9.1",
