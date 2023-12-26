@@ -9,6 +9,7 @@ export async function prepareDevelopment(): Promise<void> {
     const repoName = universalPackage.name.replace('@universal-packages/', 'universal-')
 
     await execCommand(`cd .. && git clone ${universalPackage.repository}`, { continueOnError: true })
+    await execCommand(`cd ../${repoName} && git pull`)
     await execCommand(`cd ../${repoName} && npm i`)
   }
 }
