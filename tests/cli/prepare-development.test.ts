@@ -1,12 +1,12 @@
-import { prepareDevelopment } from '../../src/prepareDevelopment'
+import { runWorkflow } from '../../src/runWorkflow'
 
-jest.mock('../../src/prepareDevelopment')
+jest.mock('../../src/runWorkflow')
 
 describe('cli', (): void => {
   it('update-dependents', async (): Promise<void> => {
     process.argv = ['node', 'umaintenance', 'prepare-development']
     await import('../../src/cli')
 
-    expect(prepareDevelopment).toHaveBeenCalled()
+    expect(runWorkflow).toHaveBeenCalledWith('prepare-development')
   })
 })

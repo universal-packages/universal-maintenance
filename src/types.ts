@@ -58,10 +58,7 @@ export interface PackageVersionResult {
     repository: string
     bugs: string
   }
-  repository: {
-    type: string
-    url: string
-  }
+  repository: string
   author: {
     name: string
     email: string

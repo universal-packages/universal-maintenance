@@ -1,0 +1,23 @@
+name: Prepare development
+
+routines:
+  get-packages-list:
+    steps:
+      - name: packages-list
+        use: get-universal-packages-list
+
+  prepare-packages:
+    strategy:
+      include: outputs.get-packages-list.packages-list
+
+    dependsOn:
+      - get-packages-list
+
+    steps:
+      - run: git clone ${{ strategy.repository }}
+        onFailure: continue
+        workingDirectory: ./..
+      - run: git pull
+        workingDirectory: ./../${{ strategy.name.replace('@universal-packages/', 'universal-') }}
+      - run: npm i
+        workingDirectory: ./../${{ strategy.name.replace('@universal-packages/', 'universal-') }}

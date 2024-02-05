@@ -1,8 +1,8 @@
 import yargs, { ArgumentsCamelCase } from 'yargs'
 
-import { prepareDevelopment } from './prepareDevelopment'
-import { updateDependents } from './updateDependents'
 import { commitAll } from './commitAll'
+import { runWorkflow } from './runWorkflow'
+import { updateDependents } from './updateDependents'
 
 yargs
   .usage('Usage: $0 <command>')
@@ -19,7 +19,7 @@ yargs
     aliases: 'sde',
     describe: 'Gets all the universal packages in development and clone them into the outer directory from where this was called',
     handler: (_argv: ArgumentsCamelCase) => {
-      prepareDevelopment()
+      runWorkflow('prepare-development')
     }
   })
   .command({
