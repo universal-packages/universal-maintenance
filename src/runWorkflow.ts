@@ -1,11 +1,10 @@
-import { Workflow } from '@universal-packages/workflows'
+import { TerminalPresenter, Workflow } from '@universal-packages/workflows'
 
 export async function runWorkflow(name: string): Promise<void> {
   const workflow = Workflow.buildFrom(name)
+  const terminalPresenter = new TerminalPresenter(workflow)
 
-  workflow.on('failure', () => {
-    console.log(JSON.stringify(workflow.graph, null, 2))
-  })
+  terminalPresenter.present()
 
   await workflow.run()
 }
