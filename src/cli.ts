@@ -1,6 +1,5 @@
 import yargs, { ArgumentsCamelCase } from 'yargs'
 
-import { commitAll } from './commitAll'
 import { runWorkflow } from './runWorkflow'
 import { updateDependents } from './updateDependents'
 
@@ -27,7 +26,7 @@ yargs
     aliases: 'sde',
     describe: 'Gets all the universal packages in development and clone them into the outer directory from where this was called',
     handler: (argv: ArgumentsCamelCase) => {
-      commitAll(argv.message as string)
+      runWorkflow('commit-all', { message: argv.message })
     }
   })
   .demandCommand(1, '')

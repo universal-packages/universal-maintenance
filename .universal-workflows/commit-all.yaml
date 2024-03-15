@@ -1,0 +1,29 @@
+name: Prepare development
+
+routines:
+  get-packages-list:
+    steps:
+      - name: packages-list
+        use: gather-local-universal-packages-list
+
+  prepare-packages:
+    strategy:
+      include: outputs.get-packages-list.packages-list
+
+    dependsOn:
+      - get-packages-list
+
+    workingDirectory: ./../${{ strategy.name }}
+
+    steps:
+      - name: repo-status
+        run: git status
+
+      - unless: outputs[routine.name].repo-status.includes('nothing to commit')
+        run: git add .
+
+      - unless: outputs[routine.name].repo-status.includes('nothing to commit')
+        run: git commit -m '${{ variables.message }}'
+
+      - unless: outputs[routine.name].repo-status.includes('nothing to commit')
+        run: git push

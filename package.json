@@ -18,7 +18,8 @@
     "test:clear": "jest --clearCache",
     "format": "prettier --write \"./{src,tests}/**/*.{ts,tsx,js,jsx,json}\"",
     "update-dependents": "./bin/umaintenance.js update-dependents",
-    "prepare-development": "./bin/umaintenance.js prepare-development"
+    "prepare-development": "./bin/umaintenance.js prepare-development",
+    "commit-all": "./bin/umaintenance.js commit-all"
   },
   "dependencies": {
     "@universal-packages/directory-traversal": "^1.3.0",
