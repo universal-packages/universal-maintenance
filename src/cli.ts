@@ -13,20 +13,29 @@ yargs
       updateDependents()
     }
   })
+
   .command({
-    command: 'prepare-development',
-    aliases: 'sde',
-    describe: 'Gets all the universal packages in development and clone them into the outer directory from where this was called',
-    handler: (_argv: ArgumentsCamelCase) => {
-      runWorkflow('prepare-development')
+    command: 'command-all <command>',
+    aliases: 'ca',
+    describe: 'Execs a command in all the universal packages in development',
+    handler: (argv: ArgumentsCamelCase) => {
+      runWorkflow('command-all', { command: argv.command })
     }
   })
   .command({
     command: 'commit-all <message>',
-    aliases: 'sde',
-    describe: 'Gets all the universal packages in development and clone them into the outer directory from where this was called',
+    aliases: 'gca',
+    describe: 'Commits all the universal packages in development with the same message',
     handler: (argv: ArgumentsCamelCase) => {
       runWorkflow('commit-all', { message: argv.message })
+    }
+  })
+  .command({
+    command: 'prepare-development',
+    aliases: 'pd',
+    describe: 'Gets all the universal packages in development and clone them into the outer directory from where this was called',
+    handler: (_argv: ArgumentsCamelCase) => {
+      runWorkflow('prepare-development')
     }
   })
   .demandCommand(1, '')
