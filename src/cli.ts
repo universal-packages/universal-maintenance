@@ -1,4 +1,4 @@
-import yargs, { ArgumentsCamelCase } from 'yargs'
+import yargs, { ArgumentsCamelCase, Argv } from 'yargs'
 
 import { runWorkflow } from './runWorkflow'
 import { updateDependents } from './updateDependents'
@@ -16,16 +16,18 @@ yargs
 
   .command({
     command: 'command-all <command>',
-    aliases: 'ca',
+    aliases: 'co-a',
     describe: 'Execs a command in all the universal packages in development',
+    builder: (yargs: Argv) => yargs.positional('command', { description: 'Command to exec in all repos', type: 'string', demandOption: true }),
     handler: (argv: ArgumentsCamelCase) => {
       runWorkflow('command-all', { command: argv.command })
     }
   })
   .command({
     command: 'commit-all <message>',
-    aliases: 'gca',
+    aliases: 'gc-a',
     describe: 'Commits all the universal packages in development with the same message',
+    builder: (yargs: Argv) => yargs.positional('message', { description: 'Commit message', type: 'string', demandOption: true }),
     handler: (argv: ArgumentsCamelCase) => {
       runWorkflow('commit-all', { message: argv.message })
     }
@@ -36,6 +38,15 @@ yargs
     describe: 'Gets all the universal packages in development and clone them into the outer directory from where this was called',
     handler: (_argv: ArgumentsCamelCase) => {
       runWorkflow('prepare-development')
+    }
+  })
+  .command({
+    command: 'sync-all',
+    aliases: 'sy-a',
+    describe: 'Syncs all the universal packages in development with the latest version in the repos',
+    builder: (yargs: Argv) => yargs.options('force', { alias: ['f'], description: 'Reset with main discarding any deviations', type: 'boolean', default: false }),
+    handler: (argv: ArgumentsCamelCase) => {
+      runWorkflow('sync-all', { force: argv.force })
     }
   })
   .demandCommand(1, '')
