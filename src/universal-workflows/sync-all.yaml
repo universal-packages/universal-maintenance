@@ -19,5 +19,8 @@ routines:
       - run: git reset --hard origin/main
         if: variables.force
 
-      - run: git pull
+      - name: git-pull
+        run: git pull
+
       - run: npm i
+        if: routine.outputs.git-pull.includes('package.json')
