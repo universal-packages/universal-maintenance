@@ -14,10 +14,17 @@ routines:
       - get-packages-list
 
     steps:
-      - run: git clone ${{ strategy.repository }}
-        onFailure: continue
+      - name: 'repo-check'
+        run: if test -d ${{ strategy.name.replace('@universal-packages/', 'universal-') }}; then echo true; fi
         workingDirectory: ./..
+
+      - run: git clone ${{ strategy.repository }}
+        unless: routine.outputs.repo-check.includes('true')
+        workingDirectory: ./..
+
       - run: git pull
+        if: routine.outputs.repo-check.includes('true')
         workingDirectory: ./../${{ strategy.name.replace('@universal-packages/', 'universal-') }}
+
       - run: npm i
         workingDirectory: ./../${{ strategy.name.replace('@universal-packages/', 'universal-') }}
