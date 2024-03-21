@@ -1,5 +1,7 @@
 name: Update Universal Dependencies
 
+maxConcurrentRoutines: 1
+
 routines:
   gather-universal-dependencies:
     steps:
@@ -14,3 +16,29 @@ routines:
 
     steps:
       - run: npm update ${{ strategy.name }} ${{ strategy.save }}
+
+  check-repo:
+    dependsOn: update-universal-dependencies
+    steps:
+      - name: git-status
+        run: git status
+
+  commit-update:
+    unless: outputs.check-repo.git-status.includes('nothing to commit')
+
+    dependsOn: check-repo
+
+    steps:
+      - run: git add .
+      - run: git commit -m "Bump @universal-packages dependencies"
+      - run: git push
+
+  create-tag:
+    if: outputs.gather-universal-dependencies.universal-dependencies.some(dep => dep.createTag)
+
+    dependsOn: commit-update
+
+    steps:
+      - run: npm version patch
+      - run: git push
+      - run: git push --tags

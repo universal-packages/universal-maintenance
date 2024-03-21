@@ -10,25 +10,25 @@ export default class GatherUniversalDependenciesUsable extends BaseUsable {
 
     if (packageJson.dependencies) {
       for (const dependency in packageJson.dependencies) {
-        if (dependency.includes('@universal-packages')) toUpdate.push({ name: dependency, save: '--save' })
+        if (dependency.includes('@universal-packages')) toUpdate.push({ name: dependency, save: '--save', createTag: true })
       }
     }
 
     if (packageJson.devDependencies) {
       for (const dependency in packageJson.devDependencies) {
-        if (dependency.includes('@universal-packages')) toUpdate.push({ name: dependency, save: '--save-dev' })
+        if (dependency.includes('@universal-packages')) toUpdate.push({ name: dependency, save: '--save-dev', createTag: false  })
       }
     }
 
     if (packageJson.peerDependencies) {
       for (const dependency in packageJson.peerDependencies) {
-        if (dependency.includes('@universal-packages')) toUpdate.push({ name: dependency, save: '--save-peer' })
+        if (dependency.includes('@universal-packages')) toUpdate.push({ name: dependency, save: '--save-peer', createTag: true  })
       }
     }
 
     if (packageJson.optionalDependencies) {
       for (const dependency in packageJson.optionalDependencies) {
-        if (dependency.includes('@universal-packages')) toUpdate.push({ name: dependency, save: '--save-optional' })
+        if (dependency.includes('@universal-packages')) toUpdate.push({ name: dependency, save: '--save-optional', createTag: false  })
       }
     }
 
