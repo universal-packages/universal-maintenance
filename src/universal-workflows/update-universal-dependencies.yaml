@@ -34,7 +34,7 @@ routines:
       - run: git push
 
   create-tag:
-    if: outputs.gather-universal-dependencies.universal-dependencies.some(dep => dep.createTag)
+    if: '!outputs.check-repo.git-status.includes('nothing to commit') && outputs.gather-universal-dependencies.universal-dependencies.some(dep => dep.createTag)'
 
     dependsOn: commit-update
 

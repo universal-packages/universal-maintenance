@@ -2,7 +2,7 @@ name: Update universal dependencies
 
 on:
   schedule:
-    - cron: '*/2 * * * *'
+    - cron: '*/5 * * * *'
 
 jobs:
   update-universal-dependencies:
