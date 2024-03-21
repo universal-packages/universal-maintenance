@@ -8,6 +8,7 @@ export async function runWorkflow(name: string, variables?: Record<string, any>)
 
   const workflow = Workflow.buildFrom(name, { variables, workflowsLocation: path.resolve(__dirname) })
   const workflowTerminalPresenter = new WorkflowTerminalPresenter({
+    logSize: process.env.CI ? 'full' : 'essentials',
     showStrategyRoutines: 'running',
     workflow
   })
