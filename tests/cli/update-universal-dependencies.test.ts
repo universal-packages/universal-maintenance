@@ -2,9 +2,9 @@ workflowsJest.mockRuns()
 
 describe('cli', (): void => {
   it('execs the right workflow', async (): Promise<void> => {
-    process.argv = ['node', 'umaintenance', 'command-all', 'git status']
+    process.argv = ['node', 'umaintenance', 'update-universal-dependencies']
     await import('../../src/cli')
 
-    expect('command-all').toHaveBeenBuildAndRunWithVariables({ command: 'git status' })
+    expect('update-universal-dependencies').toHaveBeenBuildAndRun()
   })
 })

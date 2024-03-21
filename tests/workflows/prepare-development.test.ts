@@ -3,7 +3,8 @@ import { Status } from '@universal-packages/workflows'
 describe('sync-all', (): void => {
   it('runs the right commands', async (): Promise<void> => {
     const workflow = await workflowsJest.run('prepare-development', {
-      targetMockResults: [{ command: 'if test -d universal-package-1; then echo true; fi', workingDirectory: './..', result: 'true\n' }]
+      targetMockResults: [{ command: 'if test -d universal-package-1; then echo true; fi', workingDirectory: './..', result: 'true\n' }],
+      workflowsLocation: './src'
     })
     const commandHistory = workflowsJest.getCommandHistory()
 

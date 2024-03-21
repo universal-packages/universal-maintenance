@@ -49,6 +49,14 @@ yargs
       runWorkflow('sync-all', { force: argv.force })
     }
   })
+  .command({
+    command: 'update-universal-dependencies',
+    aliases: 'uud',
+    describe: 'Updates all universal packages dependencies to the latest version',
+    handler: (_argv: ArgumentsCamelCase) => {
+      runWorkflow('update-universal-dependencies')
+    }
+  })
   .demandCommand(1, '')
   .help('h')
   .alias('h', 'help')

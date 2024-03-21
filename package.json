@@ -21,7 +21,8 @@
     "command-all": "./bin/umaintenance.js command-all",
     "commit-all": "./bin/umaintenance.js commit-all",
     "prepare-development": "./bin/umaintenance.js prepare-development",
-    "sync-all": "./bin/umaintenance.js sync-all"
+    "sync-all": "./bin/umaintenance.js sync-all",
+    "update-universal-dependencies": "./bin/umaintenance.js update-universal-dependencies"
   },
   "dependencies": {
     "@universal-packages/directory-traversal": "^1.3.1",

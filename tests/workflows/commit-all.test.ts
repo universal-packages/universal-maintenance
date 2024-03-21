@@ -4,7 +4,8 @@ describe('commit-all', (): void => {
   it('runs the right commands', async (): Promise<void> => {
     const workflow = await workflowsJest.run('commit-all', {
       targetMockResults: [{ command: 'ls', workingDirectory: '../', result: 'universal-1\nuniversal-2\n' }],
-      variables: { message: 'Some changes' }
+      variables: { message: 'Some changes' },
+      workflowsLocation: './src'
     })
     const commandHistory = workflowsJest.getCommandHistory()
 

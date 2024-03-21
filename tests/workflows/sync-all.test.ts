@@ -3,8 +3,12 @@ import { Status } from '@universal-packages/workflows'
 describe('sync-all', (): void => {
   it('runs the right commands', async (): Promise<void> => {
     const workflow = await workflowsJest.run('sync-all', {
-      targetMockResults: [{ command: 'ls', workingDirectory: '../', result: 'universal-1\nuniversal-2\n' }],
-      variables: { force: true }
+      targetMockResults: [
+        { command: 'ls', workingDirectory: '../', result: 'universal-1\nuniversal-2\n' },
+        { command: 'git pull', workingDirectory: './../universal-2', result: 'package.json' }
+      ],
+      variables: { force: true },
+      workflowsLocation: './src'
     })
     const commandHistory = workflowsJest.getCommandHistory()
 
@@ -13,7 +17,6 @@ describe('sync-all', (): void => {
       { command: 'ls', workingDirectory: '../' },
       { command: 'git reset --hard origin/main', workingDirectory: './../universal-1' },
       { command: 'git pull', workingDirectory: './../universal-1' },
-      { command: 'npm i', workingDirectory: './../universal-1' },
       { command: 'git reset --hard origin/main', workingDirectory: './../universal-2' },
       { command: 'git pull', workingDirectory: './../universal-2' },
       { command: 'npm i', workingDirectory: './../universal-2' }

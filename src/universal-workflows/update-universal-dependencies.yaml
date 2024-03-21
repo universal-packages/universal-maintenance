@@ -1,0 +1,16 @@
+name: Update Universal Dependencies
+
+routines:
+  gather-universal-dependencies:
+    steps:
+      - name: universal-dependencies
+        use: gather-universal-dependencies
+
+  update-universal-dependencies:
+    strategy:
+      include: outputs.gather-universal-dependencies.universal-dependencies
+
+    dependsOn: gather-universal-dependencies
+
+    steps:
+      - run: npm update ${{ strategy.name }} ${{ strategy.save }}
