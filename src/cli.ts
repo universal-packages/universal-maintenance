@@ -1,19 +1,9 @@
 import yargs, { ArgumentsCamelCase, Argv } from 'yargs'
 
 import { runWorkflow } from './runWorkflow'
-import { updateDependents } from './updateDependents'
 
 yargs
   .usage('Usage: $0 <command>')
-  .command({
-    command: 'update-dependents',
-    aliases: 'ud',
-    describe: 'Finds all universal packages that depends on the current package and updates them to the latest version',
-    handler: (_argv: ArgumentsCamelCase) => {
-      updateDependents()
-    }
-  })
-
   .command({
     command: 'command-all <command>',
     aliases: 'co-a',

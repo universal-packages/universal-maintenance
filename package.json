@@ -17,7 +17,6 @@
     "test:full": "jest --coverage --verbose",
     "test:clear": "jest --clearCache",
     "format": "prettier --write \"./{src,tests}/**/*.{ts,tsx,js,jsx,json}\"",
-    "update-dependents": "./bin/umaintenance.js update-dependents",
     "command-all": "./bin/umaintenance.js command-all",
     "commit-all": "./bin/umaintenance.js commit-all",
     "prepare-development": "./bin/umaintenance.js prepare-development",
