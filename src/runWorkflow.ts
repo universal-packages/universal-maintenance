@@ -1,17 +1,16 @@
 import { TerminalPresenter } from '@universal-packages/terminal-presenter'
 import { Workflow } from '@universal-packages/workflows'
 import { WorkflowTerminalPresenter } from '@universal-packages/workflows-terminal-presenter'
-import path from 'path'
 
 export async function runWorkflow(name: string, variables?: Record<string, any>): Promise<void> {
-  TerminalPresenter.start()
+  // TerminalPresenter.start()
 
-  const workflow = Workflow.buildFrom(name, { variables, workflowsLocation: path.resolve(__dirname) })
-  const workflowTerminalPresenter = new WorkflowTerminalPresenter({
-    logSize: process.env.CI ? 'full' : 'essentials',
-    showStrategyRoutines: 'running',
-    workflow
-  })
+  const workflow = Workflow.buildFrom(name, { variables, workflowsLocation: __dirname })
+  // const workflowTerminalPresenter = new WorkflowTerminalPresenter({
+  //   logSize: process.env.CI ? 'full' : 'essentials',
+  //   showStrategyRoutines: 'running',
+  //   workflow
+  // })
 
   process.addListener('SIGINT', () => {
     if (workflow.status === 'stopping') {
@@ -21,9 +20,9 @@ export async function runWorkflow(name: string, variables?: Record<string, any>)
     }
   })
 
-  workflowTerminalPresenter.present()
+  // workflowTerminalPresenter.present()
 
   await workflow.run()
 
-  TerminalPresenter.stop()
+  // TerminalPresenter.stop()
 }
