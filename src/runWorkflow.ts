@@ -5,7 +5,7 @@ import { WorkflowTerminalPresenter } from '@universal-packages/workflows-termina
 export async function runWorkflow(name: string, variables?: Record<string, any>): Promise<void> {
   TerminalPresenter.start()
 
-  const workflow = Workflow.buildFrom(name, { variables, workflowsLocation: __dirname })
+  const workflow = Workflow.buildFrom(name, { variables, workflowsLocation: __dirname, stepUsableLocation: __dirname })
   const workflowTerminalPresenter = new WorkflowTerminalPresenter({
     logSize: process.env.CI ? 'full' : 'essentials',
     showStrategyRoutines: 'running',
@@ -26,7 +26,9 @@ export async function runWorkflow(name: string, variables?: Record<string, any>)
 
   TerminalPresenter.stop()
 
-  if ([Status.Error, Status.Failure].includes(workflow.status)) {
-    process.exit(1)
-  }
+  setTimeout(() => {
+    if ([Status.Error, Status.Failure].includes(workflow.status)) {
+      process.exit(1)
+    }
+  }, 1000)
 }
