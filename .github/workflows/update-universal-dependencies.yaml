@@ -2,7 +2,7 @@ name: Update universal dependencies
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '0 * * * *'
 
 jobs:
   update-universal-dependencies:
@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.MAINTENANCE_TOKEN }}
+
       - uses: actions/setup-node@v4
         with:
           node-version: 18
