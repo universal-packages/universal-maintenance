@@ -20,6 +20,7 @@ routines:
   check-repo:
     dependsOn: update-universal-dependencies
     steps:
+      - run: npm run test:full
       - name: git-status
         run: git status
 
