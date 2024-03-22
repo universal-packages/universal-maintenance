@@ -14,12 +14,12 @@ npm install @universal-packages/maintenance --save-dev
 
 ## CLI
 
-### update-dependents
+### update-universal-dependencies
 
-Finds all universal packages that depends on the current package and updates them to the latest version. This is to clone their repos, update the package and create commits and push them.
+Updates all @universal-packages dependencies to the latest version on the package where the command is run.
 
 ```shell
-umaintenance update-dependents
+umaintenance update-universal-dependencies
 ```
 
 ## Typescript
