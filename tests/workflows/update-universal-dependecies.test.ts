@@ -28,7 +28,7 @@ describe('update-universal-dependencies', (): void => {
       { command: 'npm update @universal-packages/package-2 --save' },
       { command: 'npm update @universal-packages/package-3 --save-dev' },
       { command: 'npm run test:full' },
-      { command: 'git add .' },
+      { command: 'git add package.json package-lock.json' },
       { command: 'git commit -m "Bump @universal-packages dependencies"' },
       { command: 'git push' },
       { command: 'npm version patch' },

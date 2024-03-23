@@ -39,7 +39,7 @@ routines:
     dependsOn: test-after-update
 
     steps:
-      - run: git add .
+      - run: git add package.json package-lock.json
       - run: git commit -m "Bump @universal-packages dependencies"
       - run: git push
 
