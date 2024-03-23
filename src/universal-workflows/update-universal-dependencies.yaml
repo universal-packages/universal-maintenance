@@ -17,17 +17,26 @@ routines:
     steps:
       - run: npm update ${{ strategy.name }} ${{ strategy.save }}
 
-  check-repo:
+  after-universal-dependencies-update:
     dependsOn: update-universal-dependencies
+
+    steps:
+      - name: result
+        use: after-universal-dependencies-update
+        with:
+          universalDependenciesRoutine: gather-universal-dependencies
+          universalDependenciesStep: universal-dependencies
+
+  test-after-update:
+    unless: outputs.after-universal-dependencies-update.result.shouldCommit
+    dependsOn: after-universal-dependencies-update
     steps:
       - run: npm run test:full
-      - name: git-status
-        run: git status
 
   commit-update:
-    unless: outputs.check-repo.git-status.includes('nothing to commit')
+    unless: outputs.after-universal-dependencies-update.result.shouldCommit
 
-    dependsOn: check-repo
+    dependsOn: test-after-update
 
     steps:
       - run: git add .
@@ -35,7 +44,7 @@ routines:
       - run: git push
 
   create-tag:
-    if: "!outputs.check-repo.git-status.includes('nothing to commit') && outputs.gather-universal-dependencies.universal-dependencies.some(dep => dep.createTag)"
+    if: outputs.after-universal-dependencies-update.result.shouldCreateTag
 
     dependsOn: commit-update
 
