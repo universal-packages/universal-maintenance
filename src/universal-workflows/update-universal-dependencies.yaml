@@ -28,13 +28,13 @@ routines:
           universalDependenciesStep: universal-dependencies
 
   test-after-update:
-    unless: outputs.after-universal-dependencies-update.result.shouldCommit
+    if: outputs.after-universal-dependencies-update.result.shouldCommit
     dependsOn: after-universal-dependencies-update
     steps:
       - run: npm run test:full
 
   commit-update:
-    unless: outputs.after-universal-dependencies-update.result.shouldCommit
+    if: outputs.after-universal-dependencies-update.result.shouldCommit
 
     dependsOn: test-after-update
 
