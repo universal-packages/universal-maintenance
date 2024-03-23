@@ -13,7 +13,6 @@ export default class GatherUniversalDependenciesUsable extends BaseUsable {
         if (dependency.includes('@universal-packages'))
           toUpdate.push({
             name: dependency,
-            save: '--save',
             version: packageJson.dependencies[dependency],
             packageLocation: 'dependencies'
           })
@@ -25,7 +24,6 @@ export default class GatherUniversalDependenciesUsable extends BaseUsable {
         if (dependency.includes('@universal-packages'))
           toUpdate.push({
             name: dependency,
-            save: '--save-dev',
             version: packageJson.devDependencies[dependency],
             packageLocation: 'devDependencies'
           })
@@ -37,7 +35,6 @@ export default class GatherUniversalDependenciesUsable extends BaseUsable {
         if (dependency.includes('@universal-packages'))
           toUpdate.push({
             name: dependency,
-            save: '--save-peer',
             version: packageJson.peerDependencies[dependency],
             packageLocation: 'peerDependencies'
           })
@@ -49,7 +46,6 @@ export default class GatherUniversalDependenciesUsable extends BaseUsable {
         if (dependency.includes('@universal-packages'))
           toUpdate.push({
             name: dependency,
-            save: '--save-optional',
             version: packageJson.optionalDependencies[dependency],
             packageLocation: 'optionalDependencies'
           })

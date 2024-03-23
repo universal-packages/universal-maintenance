@@ -15,7 +15,7 @@ routines:
     dependsOn: gather-universal-dependencies
 
     steps:
-      - run: npm update ${{ strategy.name }} ${{ strategy.save }}
+      - run: npm update ${{ strategy.name }} --save
 
   after-universal-dependencies-update:
     dependsOn: update-universal-dependencies
