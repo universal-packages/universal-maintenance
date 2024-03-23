@@ -26,7 +26,7 @@ export default class GatherUniversalDependenciesUsable extends BaseUsable {
           toUpdate.push({
             name: dependency,
             save: '--save-dev',
-            version: packageJson.dependencies[dependency],
+            version: packageJson.devDependencies[dependency],
             packageLocation: 'devDependencies'
           })
       }
@@ -38,7 +38,7 @@ export default class GatherUniversalDependenciesUsable extends BaseUsable {
           toUpdate.push({
             name: dependency,
             save: '--save-peer',
-            version: packageJson.dependencies[dependency],
+            version: packageJson.peerDependencies[dependency],
             packageLocation: 'peerDependencies'
           })
       }
@@ -50,7 +50,7 @@ export default class GatherUniversalDependenciesUsable extends BaseUsable {
           toUpdate.push({
             name: dependency,
             save: '--save-optional',
-            version: packageJson.dependencies[dependency],
+            version: packageJson.optionalDependencies[dependency],
             packageLocation: 'optionalDependencies'
           })
       }
