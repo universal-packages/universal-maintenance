@@ -5,12 +5,14 @@ maxConcurrentRoutines: 1
 routines:
   gather-universal-dependencies:
     steps:
-      - name: universal-dependencies
-        use: gather-universal-dependencies
+      - use: gather-universal-dependencies
+        setVariable:
+          name: universalDependencies
+          value: ${{ output }}
 
   update-universal-dependencies:
     strategy:
-      include: outputs.gather-universal-dependencies.universal-dependencies
+      include: variables.universalDependencies
 
     dependsOn: gather-universal-dependencies
 
@@ -21,20 +23,19 @@ routines:
     dependsOn: update-universal-dependencies
 
     steps:
-      - name: result
-        use: after-universal-dependencies-update
-        with:
-          universalDependenciesRoutine: gather-universal-dependencies
-          universalDependenciesStep: universal-dependencies
+      - use: after-universal-dependencies-update
+        setVariable:
+          name: after-update
+          value: ${{ output }}
 
   test-after-update:
-    if: outputs.after-universal-dependencies-update.result.shouldCommit
+    if: variables.after-update.shouldCommit
     dependsOn: after-universal-dependencies-update
     steps:
       - run: npm run test:full
 
   commit-update:
-    if: outputs.after-universal-dependencies-update.result.shouldCommit
+    if: variables.after-update.shouldCommit
 
     dependsOn: test-after-update
 
@@ -44,7 +45,7 @@ routines:
       - run: git push
 
   create-tag:
-    if: outputs.after-universal-dependencies-update.result.shouldCreateTag
+    if: variables.after-update.shouldCreateTag
 
     dependsOn: commit-update
 

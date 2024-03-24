@@ -6,7 +6,7 @@ export default class AfterUniversalDependenciesUpdateUsable extends BaseUsable {
 
   public async use(): Promise<void> {
     const packageJson = readPackageJson()
-    const universalDependencies = this.scope.outputs[this.with.universalDependenciesRoutine][this.with.universalDependenciesStep]
+    const universalDependencies = this.scope.variables.universalDependencies
     let shouldCommit = false
     let shouldCreateTag = false
 
