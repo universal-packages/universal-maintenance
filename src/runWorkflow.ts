@@ -1,4 +1,5 @@
 import { Logger } from '@universal-packages/logger'
+import { TerminalPresenterTransport } from '@universal-packages/logger-terminal-presenter'
 import { TerminalPresenter } from '@universal-packages/terminal-presenter'
 import { Status, Workflow } from '@universal-packages/workflows'
 import { WorkflowTerminalPresenter } from '@universal-packages/workflows-terminal-presenter'
@@ -6,7 +7,7 @@ import { WorkflowTerminalPresenter } from '@universal-packages/workflows-termina
 export async function runWorkflow(name: string, variables?: Record<string, any>): Promise<void> {
   TerminalPresenter.start()
 
-  const logger = new Logger({ transports: ['terminal-presenter'] })
+  const logger = new Logger({ includeTransportAdapters: { 'terminal-presenter': TerminalPresenterTransport }, transports: ['terminal-presenter'] })
   await logger.prepare()
 
   const workflow = Workflow.buildFrom(name, { variables, workflowsLocation: __dirname, stepUsableLocation: __dirname })
