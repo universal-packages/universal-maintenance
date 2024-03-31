@@ -1,3 +1,4 @@
+import { Logger } from '@universal-packages/logger'
 import { TerminalPresenter } from '@universal-packages/terminal-presenter'
 import { Status, Workflow } from '@universal-packages/workflows'
 import { WorkflowTerminalPresenter } from '@universal-packages/workflows-terminal-presenter'
@@ -5,12 +6,11 @@ import { WorkflowTerminalPresenter } from '@universal-packages/workflows-termina
 export async function runWorkflow(name: string, variables?: Record<string, any>): Promise<void> {
   TerminalPresenter.start()
 
+  const logger = new Logger({ transports: ['terminal-presenter'] })
+  await logger.prepare()
+
   const workflow = Workflow.buildFrom(name, { variables, workflowsLocation: __dirname, stepUsableLocation: __dirname })
-  const workflowTerminalPresenter = new WorkflowTerminalPresenter({
-    logSize: process.env.CI ? 'full' : 'essentials',
-    showStrategyRoutines: 'running',
-    workflow
-  })
+  const workflowTerminalPresenter = new WorkflowTerminalPresenter({ logger, showStrategyRoutines: 'running', workflow })
 
   process.addListener('SIGINT', () => {
     if (workflow.status === 'stopping') {
@@ -24,11 +24,9 @@ export async function runWorkflow(name: string, variables?: Record<string, any>)
 
   await workflow.run()
 
-  TerminalPresenter.stop()
+  await TerminalPresenter.stop()
 
-  setTimeout(() => {
-    if ([Status.Error, Status.Failure].includes(workflow.status)) {
-      process.exit(1)
-    }
-  }, 1000)
+  if ([Status.Error, Status.Failure].includes(workflow.status)) {
+    process.exit(1)
+  }
 }
