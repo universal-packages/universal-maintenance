@@ -5,7 +5,9 @@ import { Status, Workflow } from '@universal-packages/workflows'
 import { WorkflowTerminalPresenter } from '@universal-packages/workflows-terminal-presenter'
 
 export async function runWorkflow(name: string, variables?: Record<string, any>): Promise<void> {
-  TerminalPresenter.start()
+  const terminalPresenter = new TerminalPresenter()
+
+  terminalPresenter.present()
 
   const logger = new Logger({ includeTransportAdapters: { 'terminal-presenter': TerminalPresenterTransport }, transports: ['terminal-presenter'] })
   await logger.prepare()
@@ -25,7 +27,7 @@ export async function runWorkflow(name: string, variables?: Record<string, any>)
 
   await workflow.run()
 
-  await TerminalPresenter.stop()
+  await terminalPresenter.restore()
 
   if ([Status.Error, Status.Failure].includes(workflow.status)) {
     process.exit(1)
