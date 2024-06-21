@@ -40,11 +40,11 @@ yargs
     }
   })
   .command({
-    command: 'recompile-readmes',
-    aliases: 'rec-r',
-    describe: 'Brings all the universal packages readme files into the tmp directory and recompile them',
+    command: 'collect-docs',
+    aliases: 'c-d',
+    describe: 'Collect all the README.md files from the universal packages in development and put them in the tmp/docs folder',
     handler: (argv: ArgumentsCamelCase) => {
-      runWorkflow('recompile-readmes', { force: argv.force })
+      runWorkflow('collect-docs', { force: argv.force })
     }
   })
   .command({

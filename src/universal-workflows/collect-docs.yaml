@@ -1,4 +1,4 @@
-name: Recompile Readmes
+name: Collect docs
 
 routines:
   get-packages-list:
@@ -10,7 +10,7 @@ routines:
     steps:
       - run: mkdir -p ./tmp/docs
 
-  recompile-readmes:
+  collect-docs:
     strategy:
       include: outputs.get-packages-list.packages-list
 
@@ -19,4 +19,5 @@ routines:
       - prepare
 
     steps:
-      - run: cp ./../${{ strategy.name }}/README.md ./tmp/docs/${{ strategy.name }}.md
+      - run: "echo '---\nslug: /packages/${{ strategy.name }}\ntitle: ${{ strategy.name }}\nnavigationId: ${{ strategy.name }}\n---' > ./tmp/docs/${{ strategy.name }}.md"
+      - run: cat ./../${{ strategy.name }}/README.md >> ./tmp/docs/${{ strategy.name }}.md
