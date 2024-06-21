@@ -1,0 +1,22 @@
+name: Recompile Readmes
+
+routines:
+  get-packages-list:
+    steps:
+      - name: packages-list
+        use: gather-local-universal-packages-list
+
+  prepare:
+    steps:
+      - run: mkdir -p ./tmp/docs
+
+  recompile-readmes:
+    strategy:
+      include: outputs.get-packages-list.packages-list
+
+    dependsOn:
+      - get-packages-list
+      - prepare
+
+    steps:
+      - run: cp ./../${{ strategy.name }}/README.md ./tmp/docs/${{ strategy.name }}.md

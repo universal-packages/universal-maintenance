@@ -40,6 +40,14 @@ yargs
     }
   })
   .command({
+    command: 'recompile-readmes',
+    aliases: 'rec-r',
+    describe: 'Brings all the universal packages readme files into the tmp directory and recompile them',
+    handler: (argv: ArgumentsCamelCase) => {
+      runWorkflow('recompile-readmes', { force: argv.force })
+    }
+  })
+  .command({
     command: 'update-universal-dependencies',
     aliases: 'uud',
     describe: 'Updates all universal packages dependencies to the latest version',
