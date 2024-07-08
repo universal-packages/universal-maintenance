@@ -1,4 +1,4 @@
-name: Prepare development
+name: Commit All
 
 routines:
   get-packages-list:
@@ -6,7 +6,7 @@ routines:
       - name: packages-list
         use: gather-local-universal-packages-list
 
-  prepare-packages:
+  commit-all:
     strategy:
       include: outputs.get-packages-list.packages-list
 
