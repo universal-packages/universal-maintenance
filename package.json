@@ -24,8 +24,8 @@
     "update-universal-dependencies": "./bin/umaintenance.js update-universal-dependencies"
   },
   "dependencies": {
-    "@universal-packages/directory-traversal": "^1.3.3",
-    "@universal-packages/logger-terminal-presenter": "^1.1.7",
+    "@universal-packages/directory-traversal": "^1.3.4",
+    "@universal-packages/logger-terminal-presenter": "^1.1.8",
     "@universal-packages/package-json": "^1.0.2",
     "@universal-packages/workflows": "^1.9.2",
     "@universal-packages/workflows-terminal-presenter": "^1.5.3",
