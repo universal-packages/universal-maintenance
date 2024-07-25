@@ -4,7 +4,7 @@ routines:
   get-packages-list:
     steps:
       - name: packages-list
-        use: gather-local-universal-packages-list
+        use: get-universal-packages-list
 
   prepare:
     steps:
@@ -19,5 +19,4 @@ routines:
       - prepare
 
     steps:
-      - run: "echo '---\nslug: /packages/${{ strategy.name }}\ntitle: ${{ strategy.name }}\nnavigationId: ${{ strategy.name }}\n---' > ./tmp/docs/${{ strategy.name }}.md"
-      - run: cat ./../${{ strategy.name }}/README.md >> ./tmp/docs/${{ strategy.name }}.md
+      - run: curl -s https://raw.githubusercontent.com/universal-packages/${{ strategy.name.replace('@universal-packages/', 'universal-') }}/main/README.md > ./tmp/docs/${{ strategy.name.replace('@universal-packages/', 'universal-') }}.md

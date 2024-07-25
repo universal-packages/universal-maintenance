@@ -10,8 +10,15 @@ export async function runWorkflow(name: string, variables?: Record<string, any>)
 
   present()
 
-  const workflow = Workflow.buildFrom(name, { variables, workflowsLocation: __dirname, stepUsableLocation: __dirname })
-  const workflowTerminalPresenter = new WorkflowTerminalPresenter({ logger, showStrategyRoutines: 'running', workflow })
+  let workflow: Workflow
+
+  try {
+    workflow = Workflow.buildFrom(name, { variables, workflowsLocation: __dirname, stepUsableLocation: __dirname })
+  } catch (error) {
+    logger.log({ level: 'ERROR', message: 'Failed to build workflow', error })
+    await restore()
+    process.exit(1)
+  }
 
   process.addListener('SIGINT', () => {
     if (workflow.status === 'stopping') {
@@ -21,6 +28,7 @@ export async function runWorkflow(name: string, variables?: Record<string, any>)
     }
   })
 
+  const workflowTerminalPresenter = new WorkflowTerminalPresenter({ logger, showStrategyRoutines: 'running', workflow })
   workflowTerminalPresenter.present()
 
   await workflow.run()
