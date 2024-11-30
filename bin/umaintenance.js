@@ -1,9 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --import tsx
 
 const fs = require('fs')
 const path = require('path')
-
-require('ts-node').register()
 
 try {
   const compiledCli = fs.existsSync(path.resolve(__dirname, '..', 'cli.js'))
