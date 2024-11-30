@@ -1,4 +1,4 @@
-#!/usr/bin/env node --import tsx
+#!/usr/bin/env -S node --import tsx
 
 const fs = require('fs')
 const path = require('path')
@@ -14,6 +14,6 @@ try {
 } catch (error) {
   // There was an actual error in this TS library
   if (process[Symbol.for('ts-node.register.instance')] !== undefined) {
-    console.log(error)
+    console.error(error)
   }
 }
