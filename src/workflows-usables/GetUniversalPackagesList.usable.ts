@@ -23,7 +23,9 @@ export default class GetUniversalPackagesListUsable extends BaseUsable {
     for (let i = 0; i < packages.objects.length; i++) {
       if (this.stopping) break
 
-      finalPackages.push(await this.fetchGitHubPackage(packages.objects[i].package.name))
+      const packageFromGitHub = await this.fetchGitHubPackage(packages.objects[i].package.name)
+
+      if (packageFromGitHub) finalPackages.push(packageFromGitHub)
     }
 
     return finalPackages
@@ -32,7 +34,8 @@ export default class GetUniversalPackagesListUsable extends BaseUsable {
   private async fetchGitHubPackage(packageName: string): Promise<PackageVersionResult> {
     const repoName = packageName.replace('@universal-packages/', 'universal-')
     const response = await fetch(`https://raw.githubusercontent.com/universal-packages/${repoName}/main/package.json`)
-    return await response.json()
+
+    if (response.status === 200) return await response.json()
   }
 
   private async searchPackages(search: string): Promise<PackagesSearchResult> {
