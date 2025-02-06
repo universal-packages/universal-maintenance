@@ -1,5 +1,6 @@
 export default async function fetch(url: string): Promise<any> {
   return {
+    status: 200,
     json: async (): Promise<any> => {
       if (url.includes('https://registry.npmjs.org/-/v1/search')) {
         return {
